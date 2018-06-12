@@ -1,0 +1,10 @@
+Windows
+
+
+For Network Concurrent or Network Named User licenses, the MAC address must be used as the Host ID. Additionally, computers with a B: drive must use the MAC address as the host ID.
+
+To obtain the MAC address, open a Windows command prompt and run the following command:
+
+getmac
+
+

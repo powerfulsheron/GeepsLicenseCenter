@@ -1,0 +1,115 @@
+{% load staticfiles %}
+<html>
+<head>
+ 	<link rel="stylesheet" type="text/css" href="{% static 'css/geeps.css' %}">
+</head>
+<body>
+<header class="main-header">
+	<div class="header">
+		<img id="logo" src="{% static 'img/geeps2.png' %}">
+		<h1>GeePs License Center</h1>
+		<img class="flag" id="fr_flag" src="{% static 'img/fr_flag.png' %}">
+		<img class="flag" id="en_flag" src="{% static 'img/en_flag.png' %}">
+		<a href="http://127.0.0.1:8000/admin/login/?next=/admin/">
+			<img class="login" src="{% static 'img/login.png' %}">
+		</a>
+	</div>
+</header>
+	<div class="wrap">
+		<div class="background">
+			<form method="POST" action="demande/new">{% csrf_token %}
+				<p class="half">
+					<input name="nom" type= "text" class="section" placeholder="Name">
+				</p>
+				<p class="half">
+					<input name="prenom" type= "text" class="section" placeholder="FirstName">
+				</p>
+				<p class="half">
+					<input name="email" type= "text" class="section" placeholder="Email">
+				</p>
+				<p class="half">
+					<input name="phone" type= "text" class="section" placeholder="Phone">
+				</p>
+				<p class="half">
+					<select name="batiment">
+						<option value="initial">Select your Building</option>
+						{% for batiment in batiments %}
+							<option value="{{ batiment.id }}">{{ batiment.nom }}</option>
+						{% endfor %}						
+					</select>
+				</p>
+				<p class="half">
+					<input name="office" type= "text" class="section" placeholder="Office">
+				</p>
+
+				<p>
+					<select name="logiciel" id="logiciel">
+						<option value="initial">Select the software</option>
+						{% for logiciel in logiciels %}
+							<option value="{{ logiciel.id }}">{{ logiciel }}</option>	
+						{% endfor %}
+					</select>
+				</p>
+				<p>
+					<select id="version" name="version">
+						  <option value="initial">Select the release</option>
+					</select>
+				</p>
+				<p class="half">
+					<select name="os">
+						  <option value="initial">Choose your operating system</option>
+			 			  <option value="windows">Windows</option>
+						  <option value="linux">Linux</option>
+						  <option value="mac">Mac</option>
+					</select>
+				</p>
+				<p class="half">
+					<input name="host" type="text" class="section" placeholder="HostId">
+				</p>
+				<span>
+					<a href="#"> How do I find my computer’s HostID ? </a>
+				</span>
+		  		<div class="wrapper">
+		  			<button type="submit" value="Send">Send</button>
+		  		</div>
+			</form>
+		</div>
+	</div>
+ 	<script>
+		document.getElementById("logiciel").addEventListener("change",(function() {
+			if (document.getElementById("logiciel").value != "initial") {
+				getJSON("http://127.0.0.1:8000/versions/"+document.getElementById("logiciel").value+"/getReleaseListByLogiciel/",
+				function(err, data) {
+					if (err !== null) {
+						alert('Something went wrong: ' + err);
+					} else {
+						var options="";
+					for (var i = 0; i < data.length; i++) {
+						options += '<option value="' + data[i].pk + '">' + data[i].fields['nom']+ '</option>'
+					}
+					document.getElementById("version").innerHTML=options;
+					document.getElementById("version").selectedIndex = "0"; 
+					}
+				});
+			}else{
+				document.getElementById("version").innerHTML="<option value='initial'>Select the release</option";				
+			}
+		}));
+
+		var getJSON = function(url, callback) {
+                var xhr = new XMLHttpRequest();
+	            xhr.open('GET', url, true);
+	            xhr.responseType = 'json';
+	            xhr.onload = function() {
+	            var status = xhr.status;
+	            if (status === 200) {
+	        		callback(null, xhr.response);
+	            } else {
+	                callback(status, xhr.response);
+	      		}
+    		};
+    	xhr.send();
+		};
+	</script>
+</body>
+</html>

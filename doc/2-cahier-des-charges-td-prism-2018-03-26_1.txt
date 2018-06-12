@@ -1,0 +1,39 @@
+
+L'interface permet de renouveler la licence MatLab de l'ordinateur du demandeur.
+l'utilisateur doit obligatoirement remplir les champs suivants :
+	- Name
+	- Firstname
+	- Email
+	- Telephone
+	- Bureau
+	- Batiment ( GeePs, Breguet )
+	- Matlab Release ( R2017b a R2013b )
+	- Operating system ( Windows, MacOS ou Linux )
+	- HostID
+
+Lorsque que l'utilisateur clique sur OK
+Rem : Les champs du formulaire sont encadres de ""
+
+	- envoi d'un message :
+
+		* Sujet :
+		Activation licence Matlab
+
+		* Corps :
+		Demande d'activation de Matlab "MatlabRelease" de "Firstname" "Name" pour le systeme "OperatingSystem".
+
+		* accompagne de 2 fichiers attaches au formats respectifs csv et pdf.
+		Les fichiers ont pour nom :
+
+		matlab-"MatlabRelease"-"firstname"_"Name"-DATE_d_envoi.[csv ou pdf]
+
+		DATE au format annee-mois-jour (Ex : 2018-04-01)
+
+		Le contenu du fichier csv contient la ligne ci-dessous :
+
+		AcivationLabel MatlabRelease HostID Name Firstname Email Bureau Telephone Batiment OperatingSystem
+
+	ActivationLabel est compose de "Firstname"-"Name"-MatlabRelease-DATE
+		
+	
+

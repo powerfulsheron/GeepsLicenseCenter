@@ -1,0 +1,18 @@
+Linux
+
+With R2014a and later, any MAC address can serve as the host ID regardless of interface name. If the interfaces are enumerated, use the lowest-enumerated interface.
+<br><br>
+To obtain the MAC address using a bash shell, run the following command:
+<br><br>
+/sbin/ifconfig <interfaceName>
+<br><br>
+Where <interfaceName> is the name of the network interface. For example, en0, eth0, wlan0, or enp5s0 are common Linux network interface names, although this will vary from computer to computer.
+<br><br>
+For R2013b and earlier, the Host ID is the MAC address of the eth0 or en0 interface.
+<br><br>
+To obtain the MAC Address using a bash shell, run the following commands:
+<br><br>
+/sbin/ifconfig eth0 or /sbin/ifconfig eth1
+<br>
+The MAC Address is usually the value listed next to "HWaddr". If your Linux distribution does not have network interfaces which follow the enX or ethX naming scheme, you will either need to update to MATLAB R2014a or later, or change the name of your interfaces so MATLAB can detect them. Consult your distribution's documentation for instructions on changing the network interface naming scheme.
+

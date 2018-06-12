@@ -1,0 +1,96 @@
+
+L'interface permet de renouveler la licence MatLab de l'ordinateur du demandeur.
+l'utilisateur doit obligatoirement remplir les champs suivants :
+
+	
+- Name
+	
+- Firstname
+	
+- Email
+	
+- Telephone
+	
+- Bureau
+	
+- Batiment ( GeePs, Breguet )
+	
+- Matlab Release ( R2017b a R2013b )
+	
+- Operating system ( Windows, MacOS ou Linux )
+	
+- HostID
+
+
+
+Lorsque que l'utilisateur clique sur OK 
+Rem : 
+
+Les champs du formulaire sont encadres de ""
+
+	
+
+- envoi d'un message  a cri@geeps.centralesupelec.fr :
+
+	
+Il faut tester avec votre adresse de messagerie personnelle.
+
+		
+* Sujet : 
+
+Activation licence Matlab
+
+		
+* Corps : 
+
+Demande d'activation de Matlab "MatlabRelease" de "Firstname" "Name" pour le systeme "OperatingSystem".
+
+
+* accompagne de 2 fichiers attaches au formats respectifs csv et pdf.
+
+		
+Les fichiers ont pour nom :
+
+		
+matlab-"MatlabRelease"-"firstname"_"Name"-DATE_d_envoi.[csv ou pdf]
+
+			
+DATE au format annee-mois-jour (Ex : 2018-04-01)
+
+		
+Le contenu du fichier csv contient la ligne ci-dessous :
+
+		
+AcivationLabel MatlabRelease HostID Name Firstname Email Bureau Telephone Batiment OperatingSystem
+
+		
+ActivationLabel est compose de "Firstname"-"Name"-MatlabRelease-DATE
+
+	
+
+- envoi d'un acquittement sous format de message au demandeur.
+
+		
+* Sujet :
+
+ Demande d'activation de la licence Matlab
+ ou
+ Licence Matlab activation request
+
+		
+* Corps :
+
+ Votre demande d'activation de Matlab "MatlabRelease" " a bien ete prise en compte pour votre systeme "OperatingSystem".
+ ou
+ Your Matlab "MatlabRelease" request activation for your "OperatingSystem" operating system was well taken into account.
+
+
+Le CRI du GeePs
+
+	
+
+- Bonus :
+
+ Integrer du javascript pour l'aide en ligne. Le passage du curseur sur les champs provoque une bulle d'aide.
+ Toute idee originale est bienvenue.
+

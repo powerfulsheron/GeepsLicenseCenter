@@ -1,0 +1,17 @@
+MacOS
+
+For MacOS, the Host ID is the MAC address of the en0 device.
+
+To obtain the MAC address of the en0 device, start by opening a Terminal window:
+
+    Open Finder
+    Open the "Applications" folder
+    Open the "Utilities" folder
+    Start the "Terminal" application
+
+In the Terminal window, enter the following command:
+
+ifconfig en0 | grep ether
+
+The MAC address is the value listed next to "ether".
+

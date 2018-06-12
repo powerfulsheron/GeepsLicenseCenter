@@ -1,0 +1,312 @@
+{% load staticfiles %}
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/geeps.css' %}">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	
+	<script>
+		function switchLanguage(language){
+			if(language=="french"){
+				$("#language").val("fr")
+				$("#batimentInitial").text("Selectionnez votre batiment")
+				$("#versionInitial").text("Selectionnez la version")
+				$("#logicielInitial").text("Selectionnez le logiciel")
+				$("#osInitial").text("Selectionnez votre système")
+
+				$("#nom").attr("placeholder", "Nom");
+				$("#prenom").attr("placeholder", "Prénom"); 
+				$("#phone").attr("placeholder", "Téléphone");
+				$("#bureau").attr("placeholder", "Bureau");
+				$("#questionBtn").attr("data-original-title","Comment trouver mon Host ID ?");
+				$("#exampleModalLabel").text("Comment trouver mon Host ID ?")
+
+				$("#windows").html("L'adresse MAC doit être utilisée comme Host ID.<br><br>Pour obtenir l'adresse MAC, ouvrez un terminal de commande et lancez la commande suivante :<br><br><div class='alert alert-secondary' role='alert'>getmac</div>"
+				)
+				$("#linux").html("Pour obtenir l'adresse MAC avec un bash shell, lancez la commande suivante :<br><br><div class='alert alert-secondary' role='alert'>/sbin/ifconfig 'interfaceName'</div>Où 'interfaceName' est le nom de votre interface réseau. Par exemple, en0, eth0, wlan0, ou enp5s0.<br><br>L'adresse MAC se trouve d'habitude à coté de la valeur : 'HWaddr'."
+				);
+				$("#mac").html("Pour Mac, le Host ID est l'adresse MAC de la machine en0.<br><br>Pour avoir l'adresse MAC de la machine en0, ouvrez un Terminal : <br> Finder > Applications > Utilities > Terminal<br><br>Dans le Terminal, entrez la commande suivante : <br><br><div class='alert alert-secondary' role='alert'>ifconfig en0 | grep ether</div><br>L'adresse MAC se trouve à coté de la valeur 'ether'."
+				);
+
+			}else if(language=="english"){
+				$("#language").val("en")
+				$("#batimentInitial").text("Select your building")
+				$("#versionInitial").text("Select the release")
+				$("#logicielInitial").text("Select the software")
+				$("#osInitial").text("Choose your operating system")
+
+				$("#nom").attr("placeholder", "Name");
+				$("#prenom").attr("placeholder", "First Name"); 
+				$("#phone").attr("placeholder", "Phone");
+				$("#bureau").attr("placeholder", "Office");
+				$("#exampleModalLabel").text("How to find my Host ID ?")
+				$("#questionBtn").attr("How to find my Host ID ?");
+
+				$("#windows").html("The MAC address must be used as the Host ID.<br><br>To obtain the MAC address, open a Windows command prompt and run the following command:<br><br><div class='alert alert-secondary' role='alert'>getmac</div>"
+				);
+				$("#linux").html('To obtain the MAC address using a bash shell, run the following command:<br><br><div class="alert alert-secondary" role="alert">/sbin/ifconfig "interfaceName"</div>Where "interfaceName" is the name of the network interface. For example, en0, eth0, wlan0, or enp5s0.<br><br>The MAC Address is usually the value listed next to "HWaddr".'
+				);
+				$("#mac").html('For Mac, the Host ID is the MAC address of the en0 device.<br><br>To obtain the MAC address of the en0 device, start by opening a Terminal:<br> Finder > Applications > Utilities > Terminal<br><br>In the Terminal window, enter the following command:<br><br><div class="alert alert-secondary" role="alert">ifconfig en0 | grep ether</div><br>The MAC address is the value listed next to "ether".'
+				);
+			}
+		}
+		$( document ).ready(function() {
+			if($("#respk").val()=="error"){
+				$("#messageBody").html("There has been an error. Please contact an Administrator.");
+				$("#newModal").modal();
+			}
+			else if($("#respk").val()!="null"){
+				$("#newModal").modal();
+			}
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
+			document.getElementById("logiciel").addEventListener("change",(function() {
+				if (document.getElementById("logiciel").value != "") {
+					getJSON("http://127.0.0.1:8000/versions/"+document.getElementById("logiciel").value+"/getReleaseListByLogiciel/",
+						function(err, data) {
+							if (err !== null) {
+								alert('Something went wrong: ' + err);
+							} else {
+								var options="";
+								for (var i = 0; i < data.length; i++) {
+									options += '<option value="' + data[i].pk + '">' + data[i].fields['nom']+ '</option>'
+								}
+								document.getElementById("version").innerHTML=options;
+								document.getElementById("version").selectedIndex = "0"; 
+							}
+						});
+				}else{
+					if($("#language").val()=="en"){
+						$("#version").html("<option id='versionInitial' value=''>Select the release</option>");		
+					}else if($("#language").val()=="fr"){
+						$("#version").html("<option id='versionInitial' value=''>Selectionnez la version</option>");		
+					}		
+				}
+			}));
+
+			var getJSON = function(url, callback) {
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', url, true);
+				xhr.responseType = 'json';
+				xhr.onload = function() {
+					var status = xhr.status;
+					if (status === 200) {
+						callback(null, xhr.response);
+					} else {
+						callback(status, xhr.response);
+					}
+				};
+				xhr.send();
+			};
+		});
+	</script>
+</head>
+<body class="container">
+<input id="language" type="hidden" value="en">
+<input id="respk" type="hidden" value="{{ result }}">
+	<header class="main-header">
+		<div class="row">
+			<div class="col-3">
+				<img class="logo" id="logo" src="{% static 'img/geeps3.png' %}">
+			</div>
+			<div class="col-6 align-middle">
+				<h1 class="text-center custom">GeePs License Center</h1>
+			</div>	
+			<div class="col-2 align-middle">
+				<img class="flag" id="fr_flag" src="{% static 'img/fr_flag.png' %}" onclick="switchLanguage('french')">
+				<img class="flag" id="en_flag" src="{% static 'img/en_flag.png' %}" onclick="switchLanguage('english')">
+			</div>
+			<div class="col-1 align-middle">
+				<a href="http://127.0.0.1:8000/admin/login/?next=/admin/">
+					<img class="login" src="{% static 'img/login.png' %}">
+				</a>
+			</div>
+		</div>
+	</header>
+	<hr>
+	<div class="text-center wrap shadow p-3 mb-5 bg-white rounded">
+		<form method="POST" action="licenseCenter">{% csrf_token %}
+			<div class="row form-group">
+				<div class="col-6">			
+					<input id="nom" name="nom" type="text" class="form-control" placeholder="Name" required>
+				</div>
+				<div class="col-6">
+					<input id="prenom" name="prenom" type="text" class="form-control" placeholder="First Name" required>
+				</div>
+			</div>
+			
+
+			<div class="row form-group">
+				<div class="col-6">	
+					<input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
+				</div>
+				<div class="col-6">	
+					<input id="phone" name="phone" type="tel" class="form-control" placeholder="Phone" required>
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-6">	
+					<select name="batiment" class="form-control" required>
+						<option id="batimentInitial" value="">Select your Building</option>
+						{% for batiment in batiments %}
+						<option value="{{ batiment.id }}">{{ batiment.nom }}</option>
+						{% endfor %}						
+					</select>
+				</div>
+				<div class="col-6">	
+					<input id="bureau" name="bureau" type="text" class="form-control" placeholder="Office" required>
+				</div>
+			</div>
+			
+			<div class="row form-group">
+				<div class="col-6">	
+					<select name="logiciel" id="logiciel" class="form-control" required>
+						<option id="logicielInitial" value="">Select the software</option>
+						{% for logiciel in logiciels %}
+							<option value="{{ logiciel.id }}">{{ logiciel }}</option>	
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-6">	
+					<select name="version" id="version" class="form-control">
+						<option id="versionInitial" value="initial" class="form-control">Select the release</option>
+					</select>  
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-6">	
+					<select id="os" name="os" class="form-control" required>
+						<option id="osInitial" value="">Choose your operating system</option>
+						<option value="Windows">Windows</option>
+						<option value="Linux">Linux</option>
+						<option value="Mac">Mac</option>
+					</select>
+				</div>
+				<div class="col-6 input-group">	
+					<input id="host" name="host" type="text" class="form-control" placeholder="Host Id" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" required>
+					<div class="input-group-append" data-toggle="modal" data-target="#exampleModal">
+						<button id="questionBtn" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="How do I find my Host ID ?">
+							?
+						</button>	
+					</div>
+				</div>
+			</div>	
+			<div class="wrap row form-group">
+				<div class="col-12">
+					<button class="btn btn-info" type="submit" value="Send">Send</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+
+	<!-- Modal -->
+	<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">How do I find my Host ID ?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="accordion">
+						<div class="card">
+							<div class="card-header" id="headingOne">
+								<h5 class="mb-0">
+									<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+										Windows
+									</button>
+								</h5>
+							</div>
+
+							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+								<div class="card-body" id="windows">       
+									The Host Id is the MAC adress.<br><br>
+									To obtain the MAC address, open a Windows command prompt and run the following command:<br><br>
+									<div class="alert alert-secondary" role="alert">
+										getmac
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header" id="headingTwo">
+								<h5 class="mb-0">
+									<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+										Linux
+									</button>
+								</h5>
+							</div>
+							<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+								<div class="card-body" id="linux">
+									To obtain the MAC address using a bash shell, run the following command:
+									<br><br>		
+									<div class="alert alert-secondary" role="alert">
+										/sbin/ifconfig "interfaceName"
+									</div>		
+									Where "interfaceName" is the name of the network interface. For example, en0, eth0, wlan0, or enp5s0.
+									<br><br>
+									The MAC Address is usually the value listed next to "HWaddr".
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header" id="headingThree">
+								<h5 class="mb-0">
+									<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+										Mac
+									</button>
+								</h5>
+							</div>
+							<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+								<div class="card-body" id="mac">
+									For Mac, the Host ID is the MAC address of the en0 device.<br><br>To obtain the MAC address of the en0 device, start by opening a Terminal:<br> Finder > Applications > Utilities > Terminal<br><br>
+									In the Terminal window, enter the following command:<br><br>
+									<div class="alert alert-secondary" role="alert">
+										ifconfig en0 | grep ether
+									</div>
+									<br>
+									The MAC address is the value listed next to "ether".
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">GeePs</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="messageBody" class="modal-body">
+        Your request has been sent.<br><br>
+        Votre demande à été envoyée.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>      
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

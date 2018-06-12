@@ -1,0 +1,30 @@
+.align-middle {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.logo {
+	width:100px;
+	height:100px;
+}
+
+.login {
+	width:30px;
+	height:30px;
+}
+
+.flag{
+	margin-left: 10%;
+	cursor: pointer;
+}
+
+.wrap{
+	margin-top: 5%;
+}
+
+.custom{
+	color: #527fc1;
+}
+
+.custom-color {background-color:#527fc1;}
