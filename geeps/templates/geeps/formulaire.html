@@ -6,7 +6,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-	
+
 	<script>
 		function switchLanguage(language){
 			if(language=="french"){
@@ -128,7 +128,7 @@
 	</header>
 	<hr>
 	<div class="text-center wrap shadow p-3 mb-5 bg-white rounded">
-		<form method="POST" action="licenseCenter">{% csrf_token %}
+		<form id="myForm" method="POST" action="licenseCenter">{% csrf_token %}
 			<div class="row form-group">
 				<div class="col-6">			
 					<input id="nom" name="nom" type="text" class="form-control" placeholder="Name" required>
@@ -137,8 +137,6 @@
 					<input id="prenom" name="prenom" type="text" class="form-control" placeholder="First Name" required>
 				</div>
 			</div>
-			
-
 			<div class="row form-group">
 				<div class="col-6">	
 					<input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
@@ -159,8 +157,7 @@
 				<div class="col-6">	
 					<input id="bureau" name="bureau" type="text" class="form-control" placeholder="Office" required>
 				</div>
-			</div>
-			
+			</div>		
 			<div class="row form-group">
 				<div class="col-6">	
 					<select name="logiciel" id="logiciel" class="form-control" required>
@@ -176,7 +173,6 @@
 					</select>  
 				</div>
 			</div>
-
 			<div class="row form-group">
 				<div class="col-6">	
 					<select id="os" name="os" class="form-control" required>
@@ -187,14 +183,14 @@
 					</select>
 				</div>
 				<div class="col-6 input-group">	
-					<input id="host" name="host" type="text" class="form-control" placeholder="Host Id" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" required>
+					<input id="host" name="host" type="text" class="form-control" placeholder="Host Id : XX:XX:XX:XX:XX:XX or XX-XX-XX-XX-XX-XX" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" required>
 					<div class="input-group-append" data-toggle="modal" data-target="#exampleModal">
 						<button id="questionBtn" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="How do I find my Host ID ?">
 							?
 						</button>	
 					</div>
 				</div>
-			</div>	
+			</div>
 			<div class="wrap row form-group">
 				<div class="col-12">
 					<button class="btn btn-info" type="submit" value="Send">Send</button>
@@ -202,8 +198,6 @@
 			</div>
 		</form>
 	</div>
-
-
 
 	<!-- Modal -->
 	<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -278,7 +272,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -286,7 +279,6 @@
 			</div>
 		</div>
 	</div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
