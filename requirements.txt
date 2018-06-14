@@ -2,3 +2,4 @@ Django==2.0.4
 Pillow==5.1.0
 pytz==2018.4
 reportlab==3.4.0
+Python 3.6.4 :: Anaconda, Inc.
